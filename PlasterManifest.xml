@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest schemaVersion="1.1" templateType="Project" 
+  xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>ScriptModuleTemplate</name>
+    <id>ee4fdc83-1b9a-47ae-b4e6-336053283a86</id>
+    <version>1.0.0</version>
+    <title>ScriptModuleTemplate</title>
+    <description>Scaffolds the files required for a PowerShell script module</description>
+    <author>Mike F Robbins</author>
+    <tags>PowerShell, Module, ModuleManifest</tags>
+  </metadata>
+  <parameters>
+    <parameter name='Name' type='text' prompt='Name of the module' />
+    <parameter name='Description' type='text' prompt='Brief description of module (required for publishing to the PowerShell Gallery)' />
+    <parameter name='Version' type='text' default='0.1.0' prompt='Enter the version number of the module' />
+    <parameter name='Author' type='user-fullname' prompt="Module author's name" store='text' />
+    <parameter name='CompanyName' type='text' prompt='Name of your Company' default='mikefrobbins.com' />
+    <parameter name='PowerShellVersion' default='3.0' type='text' prompt='Minimum PowerShell version' />
+  </parameters>
+  <content>
+    <message>
+    Creating folder structure
+    </message>
+    <file source='' destination='${PLASTER_PARAM_Name}'/>
+    <message>
+      Deploying common files
+    </message>
+    <file source='module.psm1' destination='${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psm1'/>
+    <message>
+      Creating Module Manifest
+    </message>
+    <newModuleManifest destination='${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1' moduleVersion='$PLASTER_PARAM_Version' rootModule='${PLASTER_PARAM_Name}.psm1' author='$PLASTER_PARAM_Author' companyName='$PLASTER_PARAM_CompanyName' description='$PLASTER_PARAM_Description' powerShellVersion='$PLASTER_PARAM_PowerShellVersion' encoding='UTF8-NoBOM'/>
+  </content>
+</plasterManifest>
