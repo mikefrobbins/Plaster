@@ -1,6 +1,6 @@
 PlasterTemplate
 ==========
 
-Scaffolds the files required for a PowerShell script module
+Plaster template to scaffold the files required for a PowerShell script module
 
-A repository to store and share my PowerShell Script Module Template and ongoing updates to it.
+A repository to store and share my Plaster template and ongoing updates to it for creating a PowerShell Script Module.
