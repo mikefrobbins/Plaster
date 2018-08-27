@@ -6,7 +6,7 @@
       <version>1.0.0</version>
       <title>Script Module Template</title>
       <description>Scaffolds the files required for a PowerShell script module</description>
-      <author>Mike F Robbins</author>
+      <author>Mike F. Robbins</author>
       <tags>PowerShell, Module, ModuleManifest</tags>
    </metadata>
    <parameters>
@@ -17,17 +17,15 @@
       <parameter name="CompanyName" type="text" default="mikefrobbins.com" prompt="Name of your Company"/>
       <parameter name="PowerShellVersion" type="text" default="3.0" prompt="Minimum PowerShell version"/>
       <parameter name="Folders" type="multichoice" default="0,1" prompt="Select folders to create">
-         <choice label="&amp;functions" value="functions" help="Adds a public folder to module root"/>
-         <choice label="&amp;internal" value="internal" help="Adds a private folder to module root"/>
-         <choice label="&amp;classes" value="classes" help="Adds a classes folder to module root"/>
+         <choice label="&amp;public" value="public" help="Adds a public folder to module root"/>
+         <choice label="&amp;private" value="private" help="Adds a private folder to module root"/>
       </parameter>
       <parameter name="Git" type="choice" default="0" prompt="Create Git top level folder?">
-         <choice label="&amp;Yes" value="$true" help="Create a top level folder for Git with module folder nested in it."/>
-         <choice label="&amp;No" value="$false" help="No Git top level folder. Module folder will be the root."/>
+         <choice label="&amp;Yes" value="Yes" help="Create a top level folder for Git with module folder nested in it."/>
+         <choice label="&amp;No" value="No" help="No Git top level folder. Module folder will be the root."/>
       </parameter>
-      <parameter name="GitRepoName" type="text" prompt="Git repo name for this module?" default="${PLASTER_PARAM_Name}"/>
-      <parameter condition="$PLASTER_PARAM_Git -eq $true" name="TechName" type="text" prompt="What Technology is this repo for?" default="${PLASTER_PARAM_GitRepoName}"/>
-      <parameter condition="$PLASTER_PARAM_Git -eq $true" name="Options" type="multichoice" prompt="Select one or more of the following options:" default="0,1,2,3" store="text">
+      <parameter condition="$PLASTER_PARAM_Git -eq 'Yes'" name="GitRepoName" type="text" prompt="Git repo name for this module? " default="${PLASTER_PARAM_Name}"/>
+      <parameter condition="$PLASTER_PARAM_Git -eq 'Yes'" name="Options" type="multichoice" prompt="Select one or more of the following options:" default="0,1,2,3" store="text">
          <choice label="Add &amp;MIT License" help="Adds MIT LICENSE file" value="License"/>
          <choice label="Add &amp;Readme.md file" help="Adds Readme.md file" value="Readme"/>
          <choice label="Add &amp;Git .gitignore file" help="Adds a .gitignore file." value="GitIgnore"/>
@@ -37,21 +35,19 @@
    </parameters>
    <content>
       <message>Creating folder structure</message>
-      <file condition="$PLASTER_PARAM_Folders -contains 'functions' -and $PLASTER_PARAM_Git -eq $true" source="" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\functions"/>
-      <file condition="$PLASTER_PARAM_Folders -contains 'internal' -and $PLASTER_PARAM_Git -eq $true" source="" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\internal"/>
-      <file condition="$PLASTER_PARAM_Folders -contains 'classes' -and $PLASTER_PARAM_Git -eq $true" source="" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\classes"/>
-      <file condition="$PLASTER_PARAM_Folders -contains 'functions' -and $PLASTER_PARAM_Git -eq $false" source="" destination="${PLASTER_PARAM_Name}\functions"/>
-      <file condition="$PLASTER_PARAM_Folders -contains 'internal' -and $PLASTER_PARAM_Git -eq $false" source="" destination="${PLASTER_PARAM_Name}\internal"/>
-      <file condition="$PLASTER_PARAM_Folders -contains 'classes' -and $PLASTER_PARAM_Git -eq $false" source="" destination="${PLASTER_PARAM_Name}\classes"/>
+      <file condition="$PLASTER_PARAM_Folders -contains 'public' -and $PLASTER_PARAM_Git -eq 'Yes'" source="" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\public"/>
+      <file condition="$PLASTER_PARAM_Folders -contains 'private' -and $PLASTER_PARAM_Git -eq 'Yes'" source="" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\private"/>
+      <file condition="$PLASTER_PARAM_Folders -contains 'public' -and $PLASTER_PARAM_Git -eq 'No'" source="" destination="${PLASTER_PARAM_Name}\public"/>
+      <file condition="$PLASTER_PARAM_Folders -contains 'private' -and $PLASTER_PARAM_Git -eq 'No'" source="" destination="${PLASTER_PARAM_Name}\private"/>
       <message>Deploying common files</message>
-      <file condition="$PLASTER_PARAM_Git -eq $true" source="module.psm1" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psm1"/>
-      <file condition="$PLASTER_PARAM_Git -eq $false" source="module.psm1" destination="${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psm1"/>
+      <file condition="$PLASTER_PARAM_Git -eq 'Yes'" source="module.psm1" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psm1"/>
+      <file condition="$PLASTER_PARAM_Git -eq 'No'" source="module.psm1" destination="${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psm1"/>
       <message>Creating Module Manifest</message>
-      <newModuleManifest condition="$PLASTER_PARAM_Git -eq $true" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" powerShellVersion="$PLASTER_PARAM_PowerShellVersion" encoding="UTF8-NoBOM"/>
-      <newModuleManifest condition="$PLASTER_PARAM_Git -eq $false" destination="${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" powerShellVersion="$PLASTER_PARAM_PowerShellVersion" encoding="UTF8-NoBOM"/>
+      <newModuleManifest condition="$PLASTER_PARAM_Git -eq 'Yes'" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" powerShellVersion="$PLASTER_PARAM_PowerShellVersion" encoding="UTF8-NoBOM"/>
+      <newModuleManifest condition="$PLASTER_PARAM_Git -eq 'No'" destination="${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" powerShellVersion="$PLASTER_PARAM_PowerShellVersion" encoding="UTF8-NoBOM"/>
       <message condition="$PLASTER_PARAM_Options -notcontains 'None'">Deploying optional components</message>
       <templateFile condition="$PLASTER_PARAM_Options -contains 'License' -and $PLASTER_PARAM_Options -notcontains 'None'" source="LICENSE" destination="${PLASTER_PARAM_GitRepoName}\LICENSE"/>
-      <templateFile condition="$PLASTER_PARAM_Options -contains 'Readme' -and $PLASTER_PARAM_Options -notcontains 'None'" source="Readme.md" destination="${PLASTER_PARAM_GitRepoName}\Readme.md"/>
+      <templateFile condition="$PLASTER_PARAM_Options -contains 'Readme' -and $PLASTER_PARAM_Options -notcontains 'None'" source="xReadme.md" destination="${PLASTER_PARAM_GitRepoName}\Readme.md"/>
       <file condition="$PLASTER_PARAM_Options -contains 'GitIgnore' -and $PLASTER_PARAM_Options -notcontains 'None'" source=".gitignore" destination="${PLASTER_PARAM_GitRepoName}\.gitignore"/>
       <file condition="$PLASTER_PARAM_Options -contains 'GitAttributes' -and $PLASTER_PARAM_Options -notcontains 'None'" source=".gitattributes" destination="${PLASTER_PARAM_GitRepoName}\.gitattributes"/>
    </content>
