@@ -7,7 +7,7 @@
       <title>Script Module Template</title>
       <description>Scaffolds the files required for a PowerShell script module</description>
       <author>Mike F. Robbins</author>
-      <tags>PowerShell, Module, ModuleManifest</tags>
+      <tags>PowerShell, Module, ScriptModule</tags>
    </metadata>
    <parameters>
       <parameter name="Name" type="text" prompt="Name of the module"/>
@@ -15,7 +15,6 @@
       <parameter name="Version" type="text" default="1.0.0" prompt="Enter the version number of the module"/>
       <parameter name="Author" type="user-fullname" store="text" prompt="Module author's name"/>
       <parameter name="CompanyName" type="text" default="mikefrobbins.com" prompt="Name of your Company"/>
-      <parameter name="PowerShellVersion" type="text" default="3.0" prompt="Minimum PowerShell version"/>
       <parameter name="Folders" type="multichoice" default="0,1" prompt="Select folders to create">
          <choice label="&amp;public" value="public" help="Adds a public folder to module root"/>
          <choice label="&amp;private" value="private" help="Adds a private folder to module root"/>
@@ -43,8 +42,8 @@
       <file condition="$PLASTER_PARAM_Git -eq 'Yes'" source="module.psm1" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psm1"/>
       <file condition="$PLASTER_PARAM_Git -eq 'No'" source="module.psm1" destination="${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psm1"/>
       <message>Creating Module Manifest</message>
-      <newModuleManifest condition="$PLASTER_PARAM_Git -eq 'Yes'" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" powerShellVersion="$PLASTER_PARAM_PowerShellVersion" encoding="UTF8-NoBOM"/>
-      <newModuleManifest condition="$PLASTER_PARAM_Git -eq 'No'" destination="${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" powerShellVersion="$PLASTER_PARAM_PowerShellVersion" encoding="UTF8-NoBOM"/>
+      <newModuleManifest condition="$PLASTER_PARAM_Git -eq 'Yes'" destination="${PLASTER_PARAM_GitRepoName}\${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" encoding="UTF8-NoBOM"/>
+      <newModuleManifest condition="$PLASTER_PARAM_Git -eq 'No'" destination="${PLASTER_PARAM_Name}\${PLASTER_PARAM_Name}.psd1" moduleVersion="$PLASTER_PARAM_Version" rootModule="${PLASTER_PARAM_Name}.psm1" author="$PLASTER_PARAM_Author" companyName="$PLASTER_PARAM_CompanyName" description="$PLASTER_PARAM_Description" encoding="UTF8-NoBOM"/>
       <message condition="$PLASTER_PARAM_Options -notcontains 'None'">Deploying optional components</message>
       <templateFile condition="$PLASTER_PARAM_Options -contains 'License' -and $PLASTER_PARAM_Options -notcontains 'None'" source="LICENSE" destination="${PLASTER_PARAM_GitRepoName}\LICENSE"/>
       <templateFile condition="$PLASTER_PARAM_Options -contains 'Readme' -and $PLASTER_PARAM_Options -notcontains 'None'" source="xReadme.md" destination="${PLASTER_PARAM_GitRepoName}\Readme.md"/>
