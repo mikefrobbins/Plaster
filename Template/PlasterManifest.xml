@@ -16,8 +16,8 @@
       <parameter name="Author" type="user-fullname" store="text" prompt="Module author's name"/>
       <parameter name="CompanyName" type="text" default="mikefrobbins.com" prompt="Name of your Company"/>
       <parameter name="Folders" type="multichoice" default="0,1" prompt="Select folders to create">
-         <choice label="&amp;public" value="public" help="Adds a public folder to module root"/>
-         <choice label="&amp;private" value="private" help="Adds a private folder to module root"/>
+         <choice label="&amp;Public" value="public" help="Adds a public folder to module root"/>
+         <choice label="P&amp;rivate" value="private" help="Adds a private folder to module root"/>
       </parameter>
       <parameter name="Git" type="choice" default="0" prompt="Create Git top level folder?">
          <choice label="&amp;Yes" value="Yes" help="Create a top level folder for Git with module folder nested in it."/>
